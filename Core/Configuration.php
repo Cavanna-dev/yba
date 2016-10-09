@@ -19,7 +19,7 @@ class Configuration
     private static function getParams()
     {
         if (self::$params == null) {
-            $urlFile = 'Config'.DIRECTORY_SEPARATOR.'config.ini';
+            $urlFile = 'config'.DIRECTORY_SEPARATOR.'config.ini';
 
             if (!file_exists($urlFile)) {
                 throw new Exception("No config file found");
