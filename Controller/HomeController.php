@@ -1,8 +1,8 @@
 <?php
 
-require_once 'Core\View.php';
-require_once 'Core\Controller.php';
-require_once 'Model\User.php';
+require_once 'Core'.DIRECTORY_SEPARATOR.'View.php';
+require_once 'Core'.DIRECTORY_SEPARATOR.'Controller.php';
+require_once 'Model'.DIRECTORY_SEPARATOR.'User.php';
 
 class HomeController extends \Controller
 {
