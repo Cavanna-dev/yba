@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Core/Model.php';
+require_once 'Core'.DIRECTORY_SEPARATOR.'Model.php';
 
 class User extends Model
 {
