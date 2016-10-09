@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Core'.DIRECTORY_SEPARATOR.'Model.php';
+require_once 'Core' . DIRECTORY_SEPARATOR . 'Model.php';
 
 class User extends Model
 {
@@ -27,21 +27,45 @@ class User extends Model
 
     public function getUser($login, $pass)
     {
-        $passwordHashed = $this->getHashedPassword($pass);
+        $sql = "SELECT *
+            FROM users WHERE login=?";
+        $userExist = $this->exec($sql, array($login));
+        $user = $userExist->fetch(PDO::FETCH_OBJ);
 
-        $sql = "SELECT id, login 
-            FROM users WHERE login=? and pwd=?";
-        $user = $this->exec($sql, array($login, $passwordHashed));
-
-        if ($user->rowCount() == 1)
-            return $user->fetch();
+        if (password_verify($pass, $user->pwd) && $userExist->rowCount() == 1)
+            return $user;
         else
             throw new Exception("Model/User.php : User $login not found");
+    }
+
+    public function getUsers()
+    {
+        $sql = "SELECT *
+            FROM users";
+        $req = $this->exec($sql);
+        $users = $req->fetchAll(PDO::FETCH_OBJ);
+
+        if ($req->rowCount() > 0)
+            return $users;
+        else
+            throw new Exception("Model/User.php : 0 Users");
     }
 
     private function getHashedPassword($pass)
     {
         return password_hash($pass, PASSWORD_DEFAULT);
+    }
+
+    public function getLastConnectedUsers()
+    {
+        $sql = "SELECT login, CASE WHEN (now() - last_connected) < 60 THEN 'true' ELSE 'false' END AS online FROM users ORDER BY online DESC";
+        $req = $this->exec($sql);
+        $users = $req->fetchAll(PDO::FETCH_OBJ);
+
+        if ($req->rowCount() > 0)
+            return $users;
+        else
+            throw new Exception("Model/User.php : 0 Users");
     }
 
 }

@@ -1,47 +1,71 @@
 <?php
 
-require_once 'Core'.DIRECTORY_SEPARATOR.'Model.php';
+require_once 'Core' . DIRECTORY_SEPARATOR . 'Model.php';
 
 class Message extends Model
 {
 
-    public function createMessage($login, $pass)
+    public function getMessages($userId = null)
     {
-
-        $sql = "SELECT id, pwd FROM users WHERE login=?";
-        $userExist = $this->exec($sql, array($login));
-
-        if ($userExist->rowCount() == 1) {
-            $user = $userExist->fetch(PDO::FETCH_OBJ);
-            return password_verify($pass, $user->pwd);
+        if (!$userId) {
+            $sql = "SELECT m.id, m.message, m.date ,u.login "
+                    . "FROM messages m "
+                    . "LEFT JOIN users u ON m.user = u.id "
+                    . "ORDER BY m.date ";
+            $messages = $this->exec($sql);
         } else {
-            $sql = 'INSERT INTO users(login, pwd)'
-                    . ' values(?, ?)';
+            $sql = "SELECT m.id, m.message, u.login "
+                    . "FROM messages m "
+                    . "LEFT JOIN users u ON m.user = u.id "
+                    . "WHERE user=? "
+                    . "ORDER BY m.date ";
+            $messages = $this->exec($sql, array($userId));
+        }
 
-            $passwordHashed = $this->getHashedPassword($pass);
-            $user = $this->exec($sql, array($login, $passwordHashed));
-
-            return $user ? true : false;
+        if ($messages->rowCount() > 0) {
+            return $messages->fetchAll(PDO::FETCH_OBJ);
+        } else {
+            throw new Exception("Model/Message.php : Messages not found");
         }
     }
 
-    public function getUser($login, $pass)
+    public function addMessage($userId, $message)
     {
-        $passwordHashed = $this->getHashedPassword($pass);
+        $sqlInsert = 'INSERT INTO messages(message, user)'
+                . ' values(?, ?)';
+        $sqlUpdate = 'UPDATE users SET last_connected = now() WHERE id=?';
 
-        $sql = "SELECT id, login 
-            FROM users WHERE login=? and pwd=?";
-        $user = $this->exec($sql, array($login, $passwordHashed));
-
-        if ($user->rowCount() == 1)
-            return $user->fetch();
-        else
-            throw new Exception("Model/User.php : User $login not found");
+        return $this->exec($sqlInsert, array($message, $userId)) && $this->exec($sqlUpdate, array($userId));
     }
 
-    private function getHashedPassword($pass)
+    public function getLastMessage()
     {
-        return password_hash($pass, PASSWORD_DEFAULT);
+        $sql = "SELECT m.id, m.message, m.date, u.login "
+                . "FROM messages m "
+                . "LEFT JOIN users u ON m.user = u.id "
+                . "ORDER BY date DESC "
+                . "LIMIT 1";
+        $message = $this->exec($sql);
+
+        if ($message->rowCount() == 1) {
+            return $message->fetch(PDO::FETCH_OBJ);
+        } else {
+            throw new Exception("Model/Message.php : LastId not found");
+        }
+    }
+
+    public function getLastMessages($lastId)
+    {
+        $sql = "SELECT m.id, m.message, m.date, u.login "
+                . "FROM messages m "
+                . "LEFT JOIN users u ON m.user = u.id "
+                . "WHERE m.id>? "
+                . "ORDER BY m.date ";
+        $message = $this->exec($sql, array($lastId));
+
+        if ($message->rowCount() > 0) {
+            return $message->fetchAll(PDO::FETCH_OBJ);
+        }
     }
 
 }
