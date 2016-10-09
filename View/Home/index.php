@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-offset-5 col-md-3">
         <div class="form-login">
-            <form method="POST" action="/yba/home/login">
+            <form method="POST" action="/home/login">
                 <h4>Welcome</h4>
                 <input type="text" id="userLogin" name="userLogin" class="form-control input-sm chat-input" placeholder="Login" />
                 </br>
