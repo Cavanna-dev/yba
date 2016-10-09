@@ -1,5 +1,4 @@
 <div class="row">
-
     <div class="conversation-wrap col-lg-3">
         <div class="media conversation">
             <a class="pull-left" href="#">

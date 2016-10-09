@@ -38,7 +38,11 @@ class HomeController extends \Controller
 
     public function chat()
     {
-        $this->generateView();
+        if ($this->request->getSession()->existAttribute("userId")) {
+            $this->generateView();
+        } else {
+            $this->generateView(array('errorMsg' => 'Vous devez etre connecter'), "index");
+        }
     }
 
 }
