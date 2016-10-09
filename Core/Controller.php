@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Config.php';
+require_once 'Configuration.php';
 require_once 'Request.php';
 require_once 'View.php';
 
