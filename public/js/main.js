@@ -8,7 +8,7 @@ $(function () {
         showLoader("#contentMessages .msg");
 
         var message = $("#message").val();
-        $.post("/yba/home/addMessage", {message: message}, function (data) {
+        $.post("/home/addMessage", {message: message}, function (data) {
             if (data === 0) {
                 alert('Vous devez entrer un message.');
             } else {
@@ -25,7 +25,7 @@ $(function () {
 });
 
 function getMessages() {
-    $.post("/yba/home/getLastMessages", {lastId: lastId}, function (data) {
+    $.post("/home/getLastMessages", {lastId: lastId}, function (data) {
         if (data !== 0) {
             $("#contentMessages").append(data.content);
 
@@ -36,7 +36,7 @@ function getMessages() {
 }
 
 function getConnected() {
-    $.post("/yba/home/getLastConnectedUsers", {}, function (data) {
+    $.post("/home/getLastConnectedUsers", {}, function (data) {
         if (data !== 0) {
             $("#connected").empty().append(data);
         }
