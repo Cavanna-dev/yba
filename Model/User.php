@@ -58,7 +58,7 @@ class User extends Model
 
     public function getLastConnectedUsers()
     {
-        $sql = "SELECT login, CASE WHEN (now() - last_connected) < 60 THEN 'true' ELSE 'false' END AS online FROM users ORDER BY online DESC";
+        $sql = "SELECT login, CASE WHEN (now() - last_connected) < 300 THEN 'true' ELSE 'false' END AS online FROM users ORDER BY online DESC";
         $req = $this->exec($sql);
         $users = $req->fetchAll(PDO::FETCH_OBJ);
 

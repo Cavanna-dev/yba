@@ -1,4 +1,4 @@
-var lastId = 0;
+//var lastId = 0;
 var mesTimer = setInterval(getMessages, 2000);
 var conTimer = setInterval(getConnected, 2000);
 
