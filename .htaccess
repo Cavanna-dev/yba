@@ -1,2 +1,2 @@
-RewriteEngine On
-RewriteRule ^([a-zA-z0-9\-\_\/]*)$ index.php?p=$1
+RewriteEngine on
+RewriteRule ^([a-zA-Z]*)/?([a-zA-Z]*)?/?([a-zA-Z0-9]*)?/?$ index.php?controleur=$1&action=$2&id=$3 [NC,L]
