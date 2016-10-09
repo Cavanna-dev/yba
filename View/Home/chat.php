@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-lg-2">
             <div class="btn-panel btn-panel-msg">
-                <a href="/home/logout" class="btn  col-lg-3  send-message-btn pull-left" role="button"><i class="fa fa-gears"></i> Se Deconnecter</a>
+                <a href="/yba/home/logout" class="btn  col-lg-3  send-message-btn pull-left" role="button"><i class="fa fa-gears"></i> Se Deconnecter</a>
             </div>
         </div>
     </div>
